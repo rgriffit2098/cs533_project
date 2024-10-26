@@ -1,0 +1,18 @@
+application:
+  databaseName: test
+
+server:
+  port: 8620
+
+mongo:
+  hostName: localhost
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/
+    username: testuser
+    password: ENC(XAUnZavoxRIDLluGtt3ESB0UTcVSwJsfKNo6IhhceAmdT9cSYDSWtnOSHsWLdgRt)
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
