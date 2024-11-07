@@ -16,3 +16,58 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+data:
+  testEmailsFile: classpath:uniqueEmails.txt
+  testDataOffset: 0
+  testDataAmount: 100000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: cluster01
+
+data:
+  testDataOffset: 0
+  testDataAmount: 10000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: cluster02
+
+data:
+  testDataOffset: 10001
+  testDataAmount: 10000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: cluster03
+
+data:
+  testDataOffset: 20001
+  testDataAmount: 10000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: cluster04
+
+data:
+  testDataOffset: 30001
+  testDataAmount: 10000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: cluster05
+
+data:
+  testDataOffset: 40001
+  testDataAmount: 10000

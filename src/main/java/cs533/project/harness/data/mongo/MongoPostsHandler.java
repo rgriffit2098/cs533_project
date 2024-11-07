@@ -18,7 +18,7 @@ public class MongoPostsHandler
         this.mongoPostsRepository = mongoPostsRepository;
     }
 
-    public boolean saveNewPost(String userId, String content)
+    public void saveNewPost(String userId, String content)
     {
         log.debug("Saving new post created by userId {} in mongo db", userId);
         MongoPostPojo mongoPostPojo = MongoPostPojo.builder()
@@ -28,6 +28,15 @@ public class MongoPostsHandler
                 .build();
 
         mongoPostsRepository.save(mongoPostPojo);
-        return true;
+    }
+
+    public void readPosts()
+    {
+        mongoPostsRepository.findAll();
+    }
+
+    public void deletePosts()
+    {
+        mongoPostsRepository.deleteAll();
     }
 }

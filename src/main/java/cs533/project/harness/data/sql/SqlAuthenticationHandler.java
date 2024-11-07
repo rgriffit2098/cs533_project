@@ -5,6 +5,7 @@ import cs533.project.harness.repository.sql.SqlAuthenticationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -18,7 +19,7 @@ public class SqlAuthenticationHandler
         this.sqlAuthenticationRepository = sqlAuthenticationRepository;
     }
 
-    public boolean saveUserAuthentication(String userId, String password)
+    public void saveUserAuthentication(String userId, String password)
     {
         Optional<SqlAuthenticationPojo> authenticationPojoOptional = sqlAuthenticationRepository.findByUserId(userId);
 
@@ -32,15 +33,33 @@ public class SqlAuthenticationHandler
                     .build();
             sqlAuthenticationRepository.save(sqlAuthenticationPojo);
         }
-        //update password
-        else
+    }
+
+    public void updateUpdateUserAuthentication(String password)
+    {
+        List<SqlAuthenticationPojo> sqlAuthenticationPojos = sqlAuthenticationRepository.findAll();
+
+        for(SqlAuthenticationPojo sqlAuthenticationPojo : sqlAuthenticationPojos)
         {
-            log.debug("Updating password for userId {} in sql db", userId);
-            SqlAuthenticationPojo sqlAuthenticationPojo = authenticationPojoOptional.get();
             sqlAuthenticationPojo.setPassword(password);
-            sqlAuthenticationRepository.save(sqlAuthenticationPojo);
         }
 
-        return true;
+        sqlAuthenticationRepository.saveAll(sqlAuthenticationPojos);
+    }
+
+    public void deleteUserAuthentication(String userId)
+    {
+        Optional<SqlAuthenticationPojo> authenticationPojoOptional = sqlAuthenticationRepository.findByUserId(userId);
+
+        //delete authentication pojo
+        if(authenticationPojoOptional.isPresent())
+        {
+            log.debug("Deleting authentication pojo with userId {} in sql db", userId);
+            sqlAuthenticationRepository.delete(authenticationPojoOptional.get());
+        }
+        else
+        {
+            log.error("No authentication entry found for userId {} in sql db", userId);
+        }
     }
 }

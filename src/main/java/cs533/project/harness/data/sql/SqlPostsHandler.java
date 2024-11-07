@@ -5,6 +5,7 @@ import cs533.project.harness.repository.sql.SqlPostsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -18,7 +19,7 @@ public class SqlPostsHandler
         this.sqlPostsRepository = sqlPostsRepository;
     }
 
-    public boolean saveNewPost(String userId, String content)
+    public void saveNewPost(String userId, String content)
     {
         log.debug("Saving new post created by userId {} in sql db", userId);
         SqlPostPojo sqlPostPojo = SqlPostPojo.builder()
@@ -28,6 +29,15 @@ public class SqlPostsHandler
                 .build();
 
         sqlPostsRepository.save(sqlPostPojo);
-        return true;
+    }
+
+    public void readPosts()
+    {
+        sqlPostsRepository.findAll();
+    }
+
+    public void deletePosts()
+    {
+        sqlPostsRepository.deleteAll();
     }
 }

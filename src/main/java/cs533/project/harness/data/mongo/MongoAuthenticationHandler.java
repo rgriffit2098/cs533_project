@@ -5,6 +5,7 @@ import cs533.project.harness.repository.mongo.MongoAuthenticationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -18,7 +19,7 @@ public class MongoAuthenticationHandler
         this.mongoAuthenticationRepository = mongoAuthenticationRepository;
     }
 
-    public boolean saveUserAuthentication(String userId, String password)
+    public void saveUserAuthentication(String userId, String password)
     {
         Optional<MongoAuthenticationPojo> authenticationPojoOptional = mongoAuthenticationRepository.findByUserId(userId);
 
@@ -32,15 +33,33 @@ public class MongoAuthenticationHandler
                     .build();
             mongoAuthenticationRepository.save(mongoAuthenticationPojo);
         }
-        //update password
-        else
+    }
+
+    public void updateUpdateUserAuthentication(String password)
+    {
+        List<MongoAuthenticationPojo> mongoAuthenticationPojos = mongoAuthenticationRepository.findAll();
+
+        for(MongoAuthenticationPojo mongoAuthenticationPojo : mongoAuthenticationPojos)
         {
-            log.debug("Updating password for userId {} in mongo db", userId);
-            MongoAuthenticationPojo mongoAuthenticationPojo = authenticationPojoOptional.get();
             mongoAuthenticationPojo.setPassword(password);
-            mongoAuthenticationRepository.save(mongoAuthenticationPojo);
         }
 
-        return true;
+        mongoAuthenticationRepository.saveAll(mongoAuthenticationPojos);
+    }
+
+    public void deleteUserAuthentication(String userId)
+    {
+        Optional<MongoAuthenticationPojo> authenticationPojoOptional = mongoAuthenticationRepository.findByUserId(userId);
+
+        //delete authentication pojo
+        if(authenticationPojoOptional.isPresent())
+        {
+            log.debug("Deleting authentication pojo with userId {} in mongo db", userId);
+            mongoAuthenticationRepository.delete(authenticationPojoOptional.get());
+        }
+        else
+        {
+            log.error("No authentication entry found for userId {} in mongo db", userId);
+        }
     }
 }
