@@ -19,9 +19,9 @@ public class MongoCredentialHandler
         this.mongoCredentialRepository = mongoCredentialRepository;
     }
 
-    public boolean saveUserCredentials(String email)
+    public String saveUserCredentials(String email)
     {
-        boolean success = false;
+        String uuid = null;
         Optional<MongoCredentialsPojo> credentialsPojoOptional = mongoCredentialRepository.findByEmail(email);
 
         //email doesn't exists
@@ -33,7 +33,7 @@ public class MongoCredentialHandler
                     .email(email)
                     .build();
             mongoCredentialRepository.save(newMongoCredentialsPojo);
-            success = true;
+            uuid = newMongoCredentialsPojo.getUserId();
         }
         //email exists
         else
@@ -41,6 +41,36 @@ public class MongoCredentialHandler
             log.error("Email {} already exists in credentials document in the mongo database", email);
         }
 
-        return success;
+        return uuid;
+    }
+
+    public String retrieveUserId(String email)
+    {
+        String uuid = null;
+        Optional<MongoCredentialsPojo> credentialsPojoOptional = mongoCredentialRepository.findByEmail(email);
+
+        if(credentialsPojoOptional.isPresent())
+        {
+            MongoCredentialsPojo mongoCredentialsPojo = credentialsPojoOptional.get();
+            uuid = mongoCredentialsPojo.getUserId();
+        }
+
+        return uuid;
+    }
+
+    public void deleteUserCredentials(String email)
+    {
+        Optional<MongoCredentialsPojo> credentialsPojoOptional = mongoCredentialRepository.findByEmail(email);
+
+        if(credentialsPojoOptional.isPresent())
+        {
+            log.debug("Deleting email {} credentials from mongo database", email);
+            mongoCredentialRepository.delete(credentialsPojoOptional.get());
+        }
+        //email doesn't exists
+        else
+        {
+            log.error("Email {} does not exist in credentials document in the mongo database", email);
+        }
     }
 }

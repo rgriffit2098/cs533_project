@@ -19,9 +19,9 @@ public class SqlCredentialHandler
         this.sqlCredentialRepository = sqlCredentialRepository;
     }
 
-    public boolean saveUserCredentials(String email)
+    public String saveUserCredentials(String email)
     {
-        boolean success = false;
+        String uuid = null;
         Optional<SqlCredentialsPojo> credentialsPojoOptional = sqlCredentialRepository.findByEmail(email);
 
         //email doesn't exists
@@ -33,14 +33,44 @@ public class SqlCredentialHandler
                     .email(email)
                     .build();
             sqlCredentialRepository.save(newSqlCredentialsPojo);
-            success = true;
+            uuid = newSqlCredentialsPojo.getUserId();
         }
         //email exists
         else
         {
-            log.error("Email {} already exists in credentials document in the sql database", email);
+            log.error("Email {} already exists in credentials table in the sql database", email);
         }
 
-        return success;
+        return uuid;
+    }
+
+    public String retrieveUserId(String email)
+    {
+        String uuid = null;
+        Optional<SqlCredentialsPojo> credentialsPojoOptional = sqlCredentialRepository.findByEmail(email);
+
+        if(credentialsPojoOptional.isPresent())
+        {
+            SqlCredentialsPojo sqlCredentialsPojo = credentialsPojoOptional.get();
+            uuid = sqlCredentialsPojo.getUserId();
+        }
+
+        return uuid;
+    }
+
+    public void deleteUserCredentials(String email)
+    {
+        Optional<SqlCredentialsPojo> credentialsPojoOptional = sqlCredentialRepository.findByEmail(email);
+
+        if(credentialsPojoOptional.isPresent())
+        {
+            log.debug("Deleting email {} credentials from sql database", email);
+            sqlCredentialRepository.delete(credentialsPojoOptional.get());
+        }
+        //email doesn't exists
+        else
+        {
+            log.error("Email {} does not exist in credentials table in the sql database", email);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package cs533.project.harness.controller;
 
-import cs533.project.harness.data.mongo.MongoCredentialHandler;
-import cs533.project.harness.data.sql.SqlCredentialHandler;
+import cs533.project.harness.service.TestDataGenerator;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,34 +11,47 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HarnessController
 {
-    private final MongoCredentialHandler mongoCredentialHandler;
-    private final SqlCredentialHandler sqlCredentialHandler;
+    private final TestDataGenerator testDataGenerator;
     private final StringEncryptor stringEncryptor;
 
-    public HarnessController(final MongoCredentialHandler mongoCredentialHandler,
-                             final SqlCredentialHandler sqlCredentialHandler,
+    public HarnessController(final TestDataGenerator testDataGenerator,
                              final StringEncryptor stringEncryptor)
     {
-        this.mongoCredentialHandler = mongoCredentialHandler;
-        this.sqlCredentialHandler = sqlCredentialHandler;
+        this.testDataGenerator = testDataGenerator;
         this.stringEncryptor = stringEncryptor;
     }
 
-    @GetMapping("/test/user")
-    public ResponseEntity<String> createTestUser()
+    @GetMapping("/run/iterations/{numberOfIterations}")
+    public ResponseEntity<String> runNumberOfIterations(@PathVariable int numberOfIterations)
     {
-        String email = "test@gmail.com";
-        boolean success = mongoCredentialHandler.saveUserCredentials(email);
-        success = sqlCredentialHandler.saveUserCredentials(email);
+        testDataGenerator.runNumberOfIterations(numberOfIterations);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-        if(success)
+    @GetMapping("/run/iterations/all")
+    public ResponseEntity<String> runAllIterations()
+    {
+        int[] iterationsList = new int[]{1, 100, 1000, 10000, 100000};
+
+        for(int numberOfIterations : iterationsList)
         {
-            return new ResponseEntity<>(HttpStatus.OK);
+            testDataGenerator.runNumberOfIterations(numberOfIterations);
         }
-        else
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/run/iterations/distributed")
+    public ResponseEntity<String> runDistributedIterations()
+    {
+        int[] iterationsList = new int[]{1000, 10000};
+
+        for(int numberOfIterations : iterationsList)
         {
-            return new ResponseEntity<>(String.format("Email %s already exists", email), HttpStatus.BAD_REQUEST);
+            testDataGenerator.runNumberOfIterations(numberOfIterations);
         }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/encrypt/{password}")

@@ -6,10 +6,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import lombok.*;
 
+@Entity
 @Getter
 @Setter
 @Builder
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class SqlCredentialsPojo
