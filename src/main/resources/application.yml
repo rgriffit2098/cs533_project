@@ -27,6 +27,9 @@ spring:
   config:
     activate:
       on-profile: cluster01
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 data:
   testDataOffset: 0
@@ -37,6 +40,9 @@ spring:
   config:
     activate:
       on-profile: cluster02
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 data:
   testDataOffset: 10001
@@ -47,6 +53,9 @@ spring:
   config:
     activate:
       on-profile: cluster03
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 data:
   testDataOffset: 20001
@@ -57,6 +66,9 @@ spring:
   config:
     activate:
       on-profile: cluster04
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 data:
   testDataOffset: 30001
@@ -67,6 +79,9 @@ spring:
   config:
     activate:
       on-profile: cluster05
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 data:
   testDataOffset: 40001
