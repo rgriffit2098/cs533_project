@@ -147,8 +147,10 @@ public class TestDataGenerator
 
     private String readMongoDbPosts()
     {
+        //this will allow the tests to be performed in a distributed manner
+        String uuid = mongoCredentialHandler.retrieveUserId(testEmails.get(0));
         long mongoDbStart = System.nanoTime();
-        mongoPostsHandler.readPosts();
+        mongoPostsHandler.readPosts(uuid);
         long mongoDbStop = System.nanoTime();
         long timeElapsed = mongoDbStop - mongoDbStart;
         return "MONGO READ POSTS: " + TimeUnit.NANOSECONDS.toMillis(timeElapsed) + "\n";
@@ -156,8 +158,10 @@ public class TestDataGenerator
 
     private String readSqlDbPosts()
     {
+        //this will allow the tests to be performed in a distributed manner
+        String uuid = sqlCredentialHandler.retrieveUserId(testEmails.get(0));
         long sqlDbStart = System.nanoTime();
-        sqlPostsHandler.readPosts();
+        sqlPostsHandler.readPosts(uuid);
         long sqlDbStop = System.nanoTime();
         long timeElapsed = sqlDbStop - sqlDbStart;
         return "SQL READ POSTS: " + TimeUnit.NANOSECONDS.toMillis(timeElapsed) + "\n";
@@ -183,8 +187,10 @@ public class TestDataGenerator
 
     private String deleteMongoDbPosts()
     {
+        //this will allow the tests to be performed in a distributed manner
+        String uuid = mongoCredentialHandler.retrieveUserId(testEmails.get(0));
         long mongoDbStart = System.nanoTime();
-        mongoPostsHandler.deletePosts();
+        mongoPostsHandler.deletePosts(uuid);
         long mongoDbStop = System.nanoTime();
         long timeElapsed = mongoDbStop - mongoDbStart;
         return "MONGO DELETE POSTS: " + TimeUnit.NANOSECONDS.toMillis(timeElapsed) + "\n";
@@ -192,8 +198,10 @@ public class TestDataGenerator
 
     private String deleteSqlDbPosts()
     {
+        //this will allow the tests to be performed in a distributed manner
+        String uuid = sqlCredentialHandler.retrieveUserId(testEmails.get(0));
         long sqlDbStart = System.nanoTime();
-        sqlPostsHandler.deletePosts();
+        sqlPostsHandler.deletePosts(uuid);
         long sqlDbStop = System.nanoTime();
         long timeElapsed = sqlDbStop - sqlDbStart;
         return "SQL DELETE POSTS: " + TimeUnit.NANOSECONDS.toMillis(timeElapsed) + "\n";

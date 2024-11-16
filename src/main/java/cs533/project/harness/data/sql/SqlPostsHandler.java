@@ -4,12 +4,13 @@ import cs533.project.harness.models.sql.SqlPostPojo;
 import cs533.project.harness.repository.sql.SqlPostsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 @Component
+@Transactional
 public class SqlPostsHandler
 {
     private final SqlPostsRepository sqlPostsRepository;
@@ -31,13 +32,13 @@ public class SqlPostsHandler
         sqlPostsRepository.save(sqlPostPojo);
     }
 
-    public void readPosts()
+    public void readPosts(String uuid)
     {
-        sqlPostsRepository.findAll();
+        sqlPostsRepository.findAllByUserId(uuid);
     }
 
-    public void deletePosts()
+    public void deletePosts(String uuid)
     {
-        sqlPostsRepository.deleteAll();
+        sqlPostsRepository.deleteAllByUserId(uuid);
     }
 }

@@ -1,6 +1,7 @@
 package cs533.project.harness.controller;
 
 import cs533.project.harness.service.TestDataGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 public class HarnessController
 {
@@ -24,7 +26,9 @@ public class HarnessController
     @GetMapping("/run/iterations/{numberOfIterations}")
     public ResponseEntity<String> runNumberOfIterations(@PathVariable int numberOfIterations)
     {
+        log.info("Running {} iterations test", numberOfIterations);
         testDataGenerator.runNumberOfIterations(numberOfIterations);
+        log.info("Completed {} iterations test", numberOfIterations);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -35,7 +39,9 @@ public class HarnessController
 
         for(int numberOfIterations : iterationsList)
         {
+            log.info("Running {} iterations test", numberOfIterations);
             testDataGenerator.runNumberOfIterations(numberOfIterations);
+            log.info("Completed {} iterations test", numberOfIterations);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -48,7 +54,9 @@ public class HarnessController
 
         for(int numberOfIterations : iterationsList)
         {
+            log.info("Running {} iterations distributed test", numberOfIterations);
             testDataGenerator.runNumberOfIterations(numberOfIterations);
+            log.info("Completed {} iterations distributed test", numberOfIterations);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);

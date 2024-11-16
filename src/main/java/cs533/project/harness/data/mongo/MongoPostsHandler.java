@@ -30,13 +30,13 @@ public class MongoPostsHandler
         mongoPostsRepository.save(mongoPostPojo);
     }
 
-    public void readPosts()
+    public void readPosts(String uuid)
     {
-        mongoPostsRepository.findAll();
+        mongoPostsRepository.findAllByUserId(uuid);
     }
 
-    public void deletePosts()
+    public void deletePosts(String uuid)
     {
-        mongoPostsRepository.deleteAll();
+        mongoPostsRepository.deleteAllByUserId(uuid);
     }
 }
