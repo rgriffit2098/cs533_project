@@ -3,6 +3,8 @@ package cs533.project.harness.data.mongo;
 import cs533.project.harness.models.mongo.MongoAuthenticationPojo;
 import cs533.project.harness.repository.mongo.MongoAuthenticationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class MongoAuthenticationHandler
         this.mongoAuthenticationRepository = mongoAuthenticationRepository;
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void saveUserAuthentication(String userId, String password)
     {
         Optional<MongoAuthenticationPojo> authenticationPojoOptional = mongoAuthenticationRepository.findByUserId(userId);
@@ -35,6 +38,7 @@ public class MongoAuthenticationHandler
         }
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void updateUpdateUserAuthentication(String password)
     {
         List<MongoAuthenticationPojo> mongoAuthenticationPojos = mongoAuthenticationRepository.findAll();
@@ -47,6 +51,7 @@ public class MongoAuthenticationHandler
         mongoAuthenticationRepository.saveAll(mongoAuthenticationPojos);
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void deleteUserAuthentication(String userId)
     {
         Optional<MongoAuthenticationPojo> authenticationPojoOptional = mongoAuthenticationRepository.findByUserId(userId);
