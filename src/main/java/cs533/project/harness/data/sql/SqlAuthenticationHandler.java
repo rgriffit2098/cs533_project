@@ -3,6 +3,8 @@ package cs533.project.harness.data.sql;
 import cs533.project.harness.models.sql.SqlAuthenticationPojo;
 import cs533.project.harness.repository.sql.SqlAuthenticationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class SqlAuthenticationHandler
         this.sqlAuthenticationRepository = sqlAuthenticationRepository;
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void saveUserAuthentication(String userId, String password)
     {
         Optional<SqlAuthenticationPojo> authenticationPojoOptional = sqlAuthenticationRepository.findByUserId(userId);
@@ -35,6 +38,7 @@ public class SqlAuthenticationHandler
         }
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void updateUpdateUserAuthentication(String password)
     {
         List<SqlAuthenticationPojo> sqlAuthenticationPojos = sqlAuthenticationRepository.findAll();
@@ -47,6 +51,7 @@ public class SqlAuthenticationHandler
         sqlAuthenticationRepository.saveAll(sqlAuthenticationPojos);
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void deleteUserAuthentication(String userId)
     {
         Optional<SqlAuthenticationPojo> authenticationPojoOptional = sqlAuthenticationRepository.findByUserId(userId);

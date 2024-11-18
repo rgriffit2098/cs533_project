@@ -9,8 +9,8 @@ import cs533.project.harness.data.sql.SqlPostsHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -250,8 +250,7 @@ public class TestDataGenerator
     private void loadTestEmails(String testEmailsFileName, int testDataOffset, int testDataAmount) throws IOException
     {
         List<String> testEmailList = new ArrayList<>();
-        File testEmailsFile = ResourceUtils.getFile(testEmailsFileName);
-        BufferedReader br = new BufferedReader(new FileReader(testEmailsFile));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ClassPathResource(testEmailsFileName).getInputStream()));
 
         // Read from file
         String line = br.readLine();
@@ -261,7 +260,7 @@ public class TestDataGenerator
             testEmailList.add(line);
         }
 
-        testEmails.addAll(testEmailList.subList(testDataOffset, testDataAmount));
+        testEmails.addAll(testEmailList.subList(testDataOffset, testDataOffset + testDataAmount));
     }
 
     //create results file

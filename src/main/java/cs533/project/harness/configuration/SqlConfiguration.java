@@ -7,10 +7,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.annotation.EnableRetry;
 
 import javax.sql.DataSource;
 
 @Setter
+@EnableRetry
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties("spring.datasource")

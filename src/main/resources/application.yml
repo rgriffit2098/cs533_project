@@ -18,7 +18,7 @@ spring:
       ddl-auto: create-drop
 
 data:
-  testEmailsFile: classpath:uniqueEmails.txt
+  testEmailsFile: uniqueEmails.txt
   testDataOffset: 0
   testDataAmount: 100000
 
@@ -29,7 +29,15 @@ spring:
       on-profile: cluster01
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://boston.cs.colostate.edu:3306/
+
+server:
+  port: 8620
+
+mongo:
+  hostName: boston.cs.colostate.edu
 
 data:
   testDataOffset: 0
@@ -43,9 +51,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  datasource:
+    url: jdbc:mysql://boston.cs.colostate.edu:3306/
+
+server:
+  port: 8621
+
+mongo:
+  hostName: boston.cs.colostate.edu
 
 data:
-  testDataOffset: 10001
+  testDataOffset: 20000
   testDataAmount: 10000
 
 ---
@@ -56,9 +72,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  datasource:
+    url: jdbc:mysql://boston.cs.colostate.edu:3306/
+
+server:
+  port: 8622
+
+mongo:
+  hostName: boston.cs.colostate.edu
 
 data:
-  testDataOffset: 20001
+  testDataOffset: 40000
   testDataAmount: 10000
 
 ---
@@ -69,9 +93,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  datasource:
+    url: jdbc:mysql://boston.cs.colostate.edu:3306/
+
+server:
+  port: 8623
+
+mongo:
+  hostName: boston.cs.colostate.edu
 
 data:
-  testDataOffset: 30001
+  testDataOffset: 60000
   testDataAmount: 10000
 
 ---
@@ -82,7 +114,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  datasource:
+    url: jdbc:mysql://boston.cs.colostate.edu:3306/
+
+server:
+  port: 8624
+
+mongo:
+  hostName: boston.cs.colostate.edu
 
 data:
-  testDataOffset: 40001
+  testDataOffset: 80000
   testDataAmount: 10000

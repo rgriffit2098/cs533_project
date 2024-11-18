@@ -3,6 +3,8 @@ package cs533.project.harness.data.sql;
 import cs533.project.harness.models.sql.SqlCredentialsPojo;
 import cs533.project.harness.repository.sql.SqlCredentialRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -19,6 +21,7 @@ public class SqlCredentialHandler
         this.sqlCredentialRepository = sqlCredentialRepository;
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public String saveUserCredentials(String email)
     {
         String uuid = null;
@@ -44,6 +47,7 @@ public class SqlCredentialHandler
         return uuid;
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public String retrieveUserId(String email)
     {
         String uuid = null;
@@ -58,6 +62,7 @@ public class SqlCredentialHandler
         return uuid;
     }
 
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void deleteUserCredentials(String email)
     {
         Optional<SqlCredentialsPojo> credentialsPojoOptional = sqlCredentialRepository.findByEmail(email);
